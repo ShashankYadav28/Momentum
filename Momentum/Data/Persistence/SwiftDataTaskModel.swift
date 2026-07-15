@@ -15,32 +15,33 @@ final class SwiftDataTaskModel {
     var createdAt:Date
     var dueDate:Date?
     var title:String
-    var description:String?
+    var taskDescription:String?
     var link: URL?
     var isCompleted: Bool
-    var sourceMessgeID: UUID?
+    var sourceMessageID: UUID?
     var updatedAt:Date?
     
     init(
         id: UUID,
         createdAt: Date,
-        dueDate: Date,
+        dueDate: Date?,
         title: String,
-        description: String,
-        link: URL,
+        description: String?,
+        link: URL?,
         isCompleted: Bool,
-        sourceMessgeID: UUID,
-        updatedAt: Bool
+        sourceMessageID: UUID?,
+        updatedAt: Date?
     )
     {
         self.id = id
         self.createdAt = createdAt
         self.dueDate = dueDate
         self.title = title
-        self.description = description
+        self.taskDescription = description
         self.link = link
         self.isCompleted = isCompleted
-        self.sourceMessgeID = sourceMessgeID
+        self.sourceMessageID = sourceMessageID
+        self.updatedAt = updatedAt
     }
     
 }

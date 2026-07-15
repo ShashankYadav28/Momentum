@@ -27,6 +27,29 @@ struct Task: Identifiable{
         self.isCompleted = false
     }
     
+    init(
+        id:UUID,
+        title:String,
+        description: String?,
+        createdAt: Date,
+        updatedAt: Date?,
+        dueDate: Date?,
+        link: URL?,
+        isCompleted: Bool,
+        sourceMessageID: UUID?,
+    
+    ) {
+        self.id = id
+        self.title = title
+        self.createdAt = createdAt
+        self.dueDate = dueDate
+        self.updatedAt = updatedAt
+        self.description = description
+        self.link = link
+        self.sourceMessageID = sourceMessageID
+        self.isCompleted = isCompleted
+    }
+    
     let id: UUID
     let sourceMessageID: UUID?
     var title: String
