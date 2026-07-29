@@ -15,7 +15,12 @@ final class DeleteTaskUseCase {
         self.repository = repository
     }
     
-    func delete(task:Task) {
-        repository.delete(task)
+    func delete(task:Task) throws {
+        do {
+            try repository.delete(task)
+        } catch {
+            throw error
+        }
+        
     }
 }

@@ -15,8 +15,16 @@ final class CreateTaskUseCase {
         self.repository = repository
     }
     
-    func execute(task: Task) {
-        repository.save(task)
+    func execute(task: Task) throws {
+        do  {
+            try repository.save(task)
+        }catch {
+            print(error.localizedDescription)
+           
+            throw error
+        }
+        
     }
     
 }
+

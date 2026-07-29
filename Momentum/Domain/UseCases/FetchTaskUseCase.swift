@@ -14,7 +14,17 @@ final class FetchTaskUseCase {
         self.repository = repository
     }
     
-    func fetch() -> [Task] {
-        return repository.fetchTask()
+    func fetch() throws-> [Task] {
+        let tasks:[Task]
+        do {
+            return try repository.fetchTask()
+        } catch {
+            print(error.localizedDescription)
+            throw error
+        }
+        
+        
     }
+    
+    
 }

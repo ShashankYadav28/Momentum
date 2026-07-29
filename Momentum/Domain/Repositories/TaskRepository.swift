@@ -9,11 +9,11 @@ import Foundation
 
 protocol TaskRepository {
     
-    func save(_ task:Task)
+    func save(_ task:Task) throws
     
-    func fetchTask()->[Task]
+    func fetchTask() throws -> [Task]
     
-    func delete(_ task:Task)
+    func delete(_ task:Task) throws
     
-    func update(_ task:Task)
+    func update(_ task:Task) throws 
 }

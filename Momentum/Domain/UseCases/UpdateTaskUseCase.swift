@@ -14,7 +14,12 @@ final class UpdateTaskUseCase {
         self.repository = repository
     }
     
-    func update(task:Task) {
-        repository.update(task)
+    func update(task:Task) throws {
+        do  {
+           try repository.update(task)
+        } catch {
+            throw error
+        }
+        
     }
 }
