@@ -32,6 +32,7 @@ final class SwiftDataTaskRepository:TaskRepository {
     }
     
     func fetchTask() throws -> [Task] {
+        
         let models:[SwiftDataTaskModel]
         let descriptor = FetchDescriptor<SwiftDataTaskModel>()
         do {
@@ -49,12 +50,29 @@ final class SwiftDataTaskRepository:TaskRepository {
 //        }
 //        
 //        return tasks
-//        
-    
+//
+        
     }
     
-    func delete(_ task: Task) {
+    func delete(_ task: Task) throws {
         
+        let decriptor = FetchDescriptor<SwiftDataTaskModel>(
+            predicate: #Predicate<SwiftDataTaskModel> { model in
+                model.id == task.id
+            }
+        )
+        do {
+            let models  = try modelContext.fetch(decriptor)
+            if let model = models.first {
+                modelContext.delete(model)
+            }
+            
+            try modelContext.save()
+        }catch {
+            print(error.localizedDescription)
+            throw error
+        }
+
     }
     
     func update(_ task: Task) {
