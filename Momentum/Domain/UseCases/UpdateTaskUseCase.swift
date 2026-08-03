@@ -20,6 +20,5 @@ final class UpdateTaskUseCase {
         } catch {
             throw error
         }
-        
     }
 }

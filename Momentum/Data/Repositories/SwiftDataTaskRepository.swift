@@ -18,6 +18,7 @@ final class SwiftDataTaskRepository:TaskRepository {
     
     
     func save(_ task: Task) throws {
+        
         let taskModel = TaskMapper.toPersistence(task: task)
         modelContext.insert(taskModel)
         do {
@@ -27,7 +28,6 @@ final class SwiftDataTaskRepository:TaskRepository {
             print(error.localizedDescription)
             throw error
         }
-     
         
     }
     
@@ -56,27 +56,44 @@ final class SwiftDataTaskRepository:TaskRepository {
     
     func delete(_ task: Task) throws {
         
-        let decriptor = FetchDescriptor<SwiftDataTaskModel>(
+        let descriptor = FetchDescriptor<SwiftDataTaskModel>(
             predicate: #Predicate<SwiftDataTaskModel> { model in
                 model.id == task.id
             }
         )
         do {
-            let models  = try modelContext.fetch(decriptor)
-            if let model = models.first {
-                modelContext.delete(model)
+            let models  = try modelContext.fetch(descriptor)
+            guard let model = models.first
+            else {
+                throw RepositryError.taskNotFound
             }
-            
+            modelContext.delete(model)
             try modelContext.save()
         }catch {
             print(error.localizedDescription)
-            throw error
+            throw RepositryError.taskNotFound
         }
 
     }
     
-    func update(_ task: Task) {
-        <#code#>
+    func update(_ task: Task) throws {
+        let descriptor = FetchDescriptor<SwiftDataTaskModel>(
+            predicate: #Predicate { model in
+                model.id == task.id
+            }
+        )
+        do {
+            let models = try modelContext.fetch(descriptor)
+            guard let model = models.first else {
+                throw RepositryError.taskNotFound
+                
+            }
+            TaskMapper.updatePersistence(model: model, task: task)
+            try modelContext.save()
+        } catch {
+            print(error.localizedDescription)
+            throw error
+        }
     }
     
     

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 enum TaskMapper {
      static func toPersistence(task:Task) -> SwiftDataTaskModel {
@@ -16,5 +17,16 @@ enum TaskMapper {
      static func toDomain(model:SwiftDataTaskModel) -> Task {
         return Task(id: model.id, title: model.title, description: model.taskDescription, createdAt: model.createdAt, updatedAt: model.updatedAt, dueDate: model.dueDate, link: model.link, isCompleted: model.isCompleted, sourceMessageID: model.sourceMessageID)
     }
-    
+    static func updatePersistence
+    (model:SwiftDataTaskModel,
+     task:Task
+    ) {
+        model.title = task.title
+        model.taskDescription = task.description
+        model.dueDate = task.dueDate
+        model.link = task.link
+        model.updatedAt = Date()
+        model.isCompleted = task.isCompleted
+        
+    }
 }
