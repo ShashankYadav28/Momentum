@@ -11,14 +11,19 @@ import Combine
 final class TaskViewModel: ObservableObject {
     
     private let createTaskUseCase:CreateTaskUseCase
+    private let fetchTaskUseCase:FetchTaskUseCase
+    
     @Published var title = ""
     @Published var description = ""
     @Published var dueDate:Date?
     @Published var linkText = ""
     @Published var errorMessage:String?
+    @Published var tasks:[Task] = []
     
-    init(createTaskUseCase: CreateTaskUseCase) {
+    init(createTaskUseCase: CreateTaskUseCase,fetchTaskUseCase:FetchTaskUseCase) {
+        
         self.createTaskUseCase = createTaskUseCase
+        self.fetchTaskUseCase = fetchTaskUseCase
     }
     
     func addTask() {
@@ -42,6 +47,10 @@ final class TaskViewModel: ObservableObject {
         
     }
     
+    
+    func fetchTasks() {
+        
+    }
     private func createTaskFromInput() -> Task? {
         
         
