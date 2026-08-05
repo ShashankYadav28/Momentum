@@ -38,6 +38,7 @@ final class TaskViewModel: ObservableObject {
         
         do {
             try createTaskUseCase.execute(task: task)
+            fetchTasks()
             clearForm()
             
         } catch {
@@ -49,7 +50,13 @@ final class TaskViewModel: ObservableObject {
     
     
     func fetchTasks() {
-        
+        do  {
+            let fetchedTasks = try fetchTaskUseCase.fetch()
+            tasks = fetchedTasks
+            
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
     private func createTaskFromInput() -> Task? {
         
