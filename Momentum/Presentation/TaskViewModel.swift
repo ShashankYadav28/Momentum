@@ -12,6 +12,8 @@ final class TaskViewModel: ObservableObject {
     
     private let createTaskUseCase:CreateTaskUseCase
     private let fetchTaskUseCase:FetchTaskUseCase
+    private let deleteTaskuseCase:DeleteTaskUseCase
+    private let updateTaskusecase:UpdateTaskUseCase
     
     @Published var title = ""
     @Published var description = ""
@@ -20,10 +22,13 @@ final class TaskViewModel: ObservableObject {
     @Published var errorMessage:String?
     @Published var tasks:[Task] = []
     
-    init(createTaskUseCase: CreateTaskUseCase,fetchTaskUseCase:FetchTaskUseCase) {
+    init(createTaskUseCase: CreateTaskUseCase,fetchTaskUseCase:FetchTaskUseCase,deleteTaskUsecase : DeleteTaskUseCase ,updateTaskUsecase: UpdateTaskUseCase) {
         
         self.createTaskUseCase = createTaskUseCase
         self.fetchTaskUseCase = fetchTaskUseCase
+        self.deleteTaskuseCase = deleteTaskUsecase
+        self.updateTaskusecase = updateTaskUsecase
+        
     }
     
     func addTask() {

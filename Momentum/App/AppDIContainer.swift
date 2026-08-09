@@ -9,6 +9,36 @@ import Foundation
 import SwiftData
 
 
-enum AppDIContainer {
+struct AppDIContainer {
+    let taskRepositry:TaskRepository
+    let modelContainer:ModelContainer
+    let modelContext:ModelContext
     
+    let createTaskUseCase:CreateTaskUseCase
+    let fetchTaskUseCase:FetchTaskUseCase
+    let deleteTaskUseCase:DeleteTaskUseCase
+    let updateTaskUseCase:UpdateTaskUseCase
+    
+    let taskViewModel:TaskViewModel
+    
+    init() throws {
+        
+        let container = try ModelContainer(for: SwiftDataTaskModel.self)
+        let context  = ModelContext(container)
+        self.modelContainer = container
+        self.modelContext = context
+        self.taskRepositry = SwiftDataTaskRepository(modelContext: context)
+        
+        self.createTaskUseCase = CreateTaskUseCase(repository: taskRepositry)
+        self.fetchTaskUseCase = FetchTaskUseCase(repository: taskRepositry)
+        self.deleteTaskUseCase = DeleteTaskUseCase(repository: taskRepositry)
+        self.updateTaskUseCase = UpdateTaskUseCase(repository: taskRepositry)
+    
+        self.taskViewModel = TaskViewModel(createTaskUseCase: createTaskUseCase, fetchTaskUseCase: fetchTaskUseCase, deleteTaskUsecase: deleteTaskUseCase, updateTaskUsecase: updateTaskUseCase)
+    }
+    
+    
+    
+//    let taskRepositry:TaskRepository
+        
 }
