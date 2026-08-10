@@ -55,10 +55,11 @@ final class SwiftDataTaskRepository:TaskRepository {
     }
     
     func delete(_ task: Task) throws {
+        let taskID = task.id
         
         let descriptor = FetchDescriptor<SwiftDataTaskModel>(
             predicate: #Predicate<SwiftDataTaskModel> { model in
-                model.id == task.id
+                model.id == taskID
             }
         )
         do {
@@ -77,9 +78,11 @@ final class SwiftDataTaskRepository:TaskRepository {
     }
     
     func update(_ task: Task) throws {
+        
+        let taskID = task.id
         let descriptor = FetchDescriptor<SwiftDataTaskModel>(
             predicate: #Predicate { model in
-                model.id == task.id
+                model.id == taskID
             }
         )
         do {
