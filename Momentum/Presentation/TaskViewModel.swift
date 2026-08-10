@@ -37,10 +37,10 @@ final class TaskViewModel: ObservableObject {
         //            errorMessage =  "Title Not Found "
         //            return
         //        }
+        
         guard let task = createTaskFromInput() else {
             return
         }
-        
         do {
             try createTaskUseCase.execute(task: task)
             fetchTasks()
@@ -49,10 +49,8 @@ final class TaskViewModel: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
         }
-        
-        
+
     }
-    
     
     func fetchTasks() {
         do  {
@@ -63,9 +61,8 @@ final class TaskViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+    
     private func createTaskFromInput() -> Task? {
-        
-        
         //       let link  = linkText.isEmpty ? nil: URL(string: linkText)
         var link:URL?
         
@@ -90,9 +87,27 @@ final class TaskViewModel: ObservableObject {
         let task = Task(title: trimmedTitle, description: finalDescription, dueDate: dueDate, link: link)
         return task
         
-        
     }
     
+    func deleteTask( _ task:Task) {
+        do {
+            try deleteTaskuseCase.delete(task: task)
+            fetchTasks()
+        }
+        catch {
+            errorMessage = error.localizedDescription
+        }
+
+    }
+    
+    func updateTask(_ task:Task) {
+        do {
+            try updateTaskusecase.update(task: task)
+            fetchTasks()
+        } catch  {
+            errorMessage = error.localizedDescription
+        }
+    }
     private func clearForm() {
         title = ""
         description = ""
