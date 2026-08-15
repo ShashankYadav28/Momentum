@@ -20,7 +20,8 @@ struct MomentumApp: App {
         WindowGroup {
             Group {
                 if let appContainer {
-                    Text("HomeScreen")
+                    HomeScreen()
+                        .environmentObject(appContainer.taskViewModel)
                 } else {
                     RecoveryScreen {
                         startApp()
