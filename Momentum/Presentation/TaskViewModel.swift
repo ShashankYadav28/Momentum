@@ -37,12 +37,13 @@ final class TaskViewModel: ObservableObject {
         //            errorMessage =  "Title Not Found "
         //            return
         //        }
-        
+
         guard let task = createTaskFromInput() else {
             return
         }
         do {
             try createTaskUseCase.execute(task: task)
+            print("Tasks saved",task.title)
             fetchTasks()
             clearForm()
             
@@ -55,9 +56,11 @@ final class TaskViewModel: ObservableObject {
     func fetchTasks() {
         do  {
             let fetchedTasks = try fetchTaskUseCase.fetch()
+            print("fetched Task: \(fetchedTasks.count)")
             tasks = fetchedTasks
             
         } catch {
+            print(" Fetch Error: ", error)
             errorMessage = error.localizedDescription
         }
     }
@@ -97,7 +100,6 @@ final class TaskViewModel: ObservableObject {
         catch {
             errorMessage = error.localizedDescription
         }
-
     }
     
     func updateTask(_ task:Task) {

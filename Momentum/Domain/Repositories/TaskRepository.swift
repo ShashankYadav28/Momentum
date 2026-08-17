@@ -15,5 +15,6 @@ protocol TaskRepository {
     
     func delete(_ task:Task) throws
     
-    func update(_ task:Task) throws 
+    func update(_ task:Task) throws
+    
 }
