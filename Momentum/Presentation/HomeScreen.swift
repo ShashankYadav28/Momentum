@@ -137,19 +137,27 @@ struct TodayFocus:View {
                 }
                 else {
                     ForEach(taskViewModel.tasks) { task in
-                        
-                        VStack(alignment: .leading) {
-                            Text(task.title)
-                                .font(.headline)
-                            if let description = task.description {
-                                Text(description)
-                                    .foregroundStyle(.secondary)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(task.title)
+                                    .font(.headline)
+                                if let description = task.description {
+                                    Text(description)
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                                if let dueDate = task.dueDate {
+                                    Text(dueDate.formatted(date: .abbreviated, time: .shortened))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
-                            
-                            if let dueDate = task.dueDate {
-                                Text(dueDate.formatted(date: .abbreviated, time: .shortened))
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                            Spacer()
+                            Button {
+                                taskViewModel.toggleTaskCompletion(task)
+                            } label: {
+                                Image(systemName: task.isCompleted ? "circle.fill" : "circle")
+                                    .font(.title2)
                             }
                         }
                         .frame(maxWidth: .infinity,alignment: .leading)

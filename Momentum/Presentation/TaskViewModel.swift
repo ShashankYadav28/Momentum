@@ -117,4 +117,18 @@ final class TaskViewModel: ObservableObject {
         linkText = ""
         errorMessage  = nil
     }
+    
+    func toggleTaskCompletion(_ task:Task) {
+        var updatedTask = task
+        updatedTask.isCompleted.toggle()
+        
+        do {
+            try updateTaskusecase.update(task: updatedTask)
+            fetchTasks()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+//        updateTaskusecase.update(task: updatedTask)
+        
+    }
 }
