@@ -11,25 +11,29 @@ struct HomeScreen:View  {
     @State var showTask = false
     @EnvironmentObject var taskViewModel:TaskViewModel
     var body: some View {
-        VStack(alignment: .leading, spacing:20) {
-            HomeHeader()
-            PasteCard()
-            TodayFocus(showTask: {
-                showTask = true
-            })
-            Statistics()
-            Spacer()
-//            Spacer()
+        ScrollView {
+            VStack(alignment: .leading, spacing:20) {
+                HomeHeader()
+                PasteCard()
+                TodayFocus(showTask: {
+                    showTask = true
+                })
+                Statistics()
+                Spacer()
+    //            Spacer()
 
+            }
+            .padding()
+            .sheet(isPresented: $showTask) {
+                AddTaskView()
+            }
+            .task {
+                taskViewModel.fetchTasks()
+            }
         }
-        .padding()
-        .sheet(isPresented: $showTask) {
-            AddTaskView()
-        }
-        .task {
-            taskViewModel.fetchTasks()
-        }
+//        .swipeActionsContainer()
     }
+        
 }
 #Preview {
     HomeScreen()
@@ -49,7 +53,7 @@ struct HomeHeader:View {
             
             Button {
                 
-            }label: {
+            } label: {
                 Image(systemName: "plus")
                     .font(.title2)
                     .frame(width: 44,height: 44)
@@ -134,37 +138,60 @@ struct TodayFocus:View {
                         }
                         .buttonStyle(.borderedProminent)
                     }
+                    
                 }
                 else {
-                    ForEach(taskViewModel.tasks) { task in
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(task.title)
-                                    .font(.headline)
-                                if let description = task.description {
-                                    Text(description)
-                                        .foregroundStyle(.secondary)
+                    LazyVStack(spacing: 15){
+                        ForEach(taskViewModel.tasks) { task in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(task.title)
+                                        .font(.headline)
+                                    if let description = task.description {
+                                        Text(description)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    
+                                    if let dueDate = task.dueDate {
+                                        Text(dueDate.formatted(date: .abbreviated, time: .shortened))
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                Spacer()
+                                Button {
+                                    taskViewModel.toggleTaskCompletion(task)
+                                } label: {
+                                    Image(systemName: task.isCompleted ? "circle.fill" : "circle")
+                                        .font(.title2)
+                                }
+                            }
+                            .frame(maxWidth: .infinity,alignment: .leading)
+                            .padding()
+                            .background(
+                                .regularMaterial,in: RoundedRectangle(cornerRadius: 20)
+                            )
+                            .contextMenu {
+                                Button {
+                                    
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
                                 }
                                 
-                                if let dueDate = task.dueDate {
-                                    Text(dueDate.formatted(date: .abbreviated, time: .shortened))
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                Button {
+                                    taskViewModel.deleteTask(task)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
                                 }
                             }
-                            Spacer()
-                            Button {
-                                taskViewModel.toggleTaskCompletion(task)
-                            } label: {
-                                Image(systemName: task.isCompleted ? "circle.fill" : "circle")
-                                    .font(.title2)
-                            }
+//                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
+//                                Button {
+//                                    taskViewModel.deleteTask(task)
+//                                } label: {
+//                                    Label("Delete", systemImage: "trash")
+//                                }
+//                            }
                         }
-                        .frame(maxWidth: .infinity,alignment: .leading)
-                        .padding()
-                        .background(
-                            .regularMaterial,in: RoundedRectangle(cornerRadius: 20)
-                        )
                     }
                 }
             }
@@ -195,6 +222,7 @@ struct Statistics:View {
                 
                 Circle()
                     .stroke(.secondary.opacity(0.4),lineWidth: 8)
+                    .frame(width: 140,height: 140)
             }
             .frame(maxWidth: .infinity)
             .padding()
