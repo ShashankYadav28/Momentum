@@ -15,9 +15,9 @@ struct HomeScreen:View  {
             VStack(alignment: .leading, spacing:20) {
                 HomeHeader()
                 PasteCard()
-                TodayFocus(showTask: {
+                TodayFocus {
                     showTask = true
-                })
+                }
                 Statistics()
                 Spacer()
     //            Spacer()
@@ -25,7 +25,7 @@ struct HomeScreen:View  {
             }
             .padding()
             .sheet(isPresented: $showTask) {
-                AddTaskView()
+                AddTaskView(taskToEdit: <#Task#>)
             }
             .task {
                 taskViewModel.fetchTasks()
@@ -105,6 +105,7 @@ struct TodayFocus:View {
     
     @EnvironmentObject var taskViewModel:TaskViewModel
     let showTask: () -> Void
+    @State private var taskToEdit:Task?
     
     var body:some View {
         VStack(alignment: .leading, spacing: 12){
@@ -138,7 +139,6 @@ struct TodayFocus:View {
                         }
                         .buttonStyle(.borderedProminent)
                     }
-                    
                 }
                 else {
                     LazyVStack(spacing: 15){
@@ -173,7 +173,7 @@ struct TodayFocus:View {
                             )
                             .contextMenu {
                                 Button {
-                                    
+                                    taskToEdit = task
                                 } label: {
                                     Label("Edit", systemImage: "pencil")
                                 }

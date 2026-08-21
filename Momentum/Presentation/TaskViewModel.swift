@@ -21,6 +21,9 @@ final class TaskViewModel: ObservableObject {
     @Published var linkText = ""
     @Published var errorMessage:String?
     @Published var tasks:[Task] = []
+    @Published var taskToedit:Task?
+
+//    @Published var taskBeingEdited: Task?
     
     init(createTaskUseCase: CreateTaskUseCase,fetchTaskUseCase:FetchTaskUseCase,deleteTaskUsecase : DeleteTaskUseCase ,updateTaskUsecase: UpdateTaskUseCase) {
         

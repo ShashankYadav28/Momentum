@@ -28,6 +28,7 @@ struct Task: Identifiable{
     }
     
     init(
+        
         id:UUID,
         title:String,
         description: String?,
@@ -37,6 +38,7 @@ struct Task: Identifiable{
         link: URL?,
         isCompleted: Bool,
         sourceMessageID: UUID?,
+        
     
     ) {
         self.id = id

@@ -12,15 +12,22 @@ struct AddTaskView:View {
     @EnvironmentObject var taskViewModel:TaskViewModel
     @Environment(\.dismiss) private var dismiss
     
+    let taskToEdit:Task?
+    init(taskToEdit:Task? = nil) {
+        self.taskToEdit = taskToEdit
+    }
+    
     var body:some View {
         NavigationStack {
             Form {
                 Section("Task"){
+                    
                     TextField("Title",text: $taskViewModel.title)
                     
                     TextField("Description", text: $taskViewModel.description)
-    
+                    
                 }
+                
                 Section("Details") {
                     DatePicker("Due Date", selection: Binding(get: {
                         taskViewModel.dueDate ?? Date()
@@ -32,14 +39,23 @@ struct AddTaskView:View {
                         .keyboardType(.URL)
                         .textInputAutocapitalization(.never)
                 }
+                
                 Section {
+                    
                     Button {
-                        taskViewModel.addTask()
+                        if let taskToEdit {
+                            var updatedTask = taskToEdit
+                            updatedTask.title = taskViewModel.title
+                            updatedTask.description = taskViewModel.description.isEmpty ? nil : taskViewModel.description
+                            updatedTask.dueDate = taskViewModel.dueDate
+                            taskViewModel.updateTask(updatedTask)
+                        } else {
+                            taskViewModel.addTask()
+                        }
                         dismiss()
                     } label: {
-                        Text("save Task")
+                        Text( taskToEdit == nil ? "save Task" : "UpdateTask" )
                     }
-            
                 }
             }
             .navigationTitle("Add Task")
@@ -47,6 +63,6 @@ struct AddTaskView:View {
     }
 }
 #Preview {
-    AddTaskView()
+    AddTaskView(taskToEdit: Task(title: "Meet at ", description: "i have a gooflr meet at 7pm", link: nil, sourceMessageID: nil) )
         .environmentObject(AppDIContainer.preview.taskViewModel)
 }
