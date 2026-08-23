@@ -15,6 +15,7 @@ struct HomeScreen:View  {
         ScrollView {
             VStack(alignment: .leading, spacing:20) {
                 HomeHeader(showrtask: {
+                    taskViewModel.clearForm()
                     taskSheet = .add
                     })
                 PasteCard()

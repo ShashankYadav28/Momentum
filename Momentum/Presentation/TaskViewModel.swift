@@ -127,7 +127,7 @@ final class TaskViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
-    private func clearForm() {
+        func clearForm() {
         
         title = ""
         description = ""
