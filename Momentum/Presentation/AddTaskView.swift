@@ -44,11 +44,8 @@ struct AddTaskView:View {
                     
                     Button {
                         if let taskToEdit {
-                            var updatedTask = taskToEdit
-                            updatedTask.title = taskViewModel.title
-                            updatedTask.description = taskViewModel.description.isEmpty ? nil : taskViewModel.description
-                            updatedTask.dueDate = taskViewModel.dueDate
-                            taskViewModel.updateTask(updatedTask)
+                            taskViewModel.updateTask(taskToEdit)
+//                            taskViewModel.updateTask(updatedTask)
                         } else {
                             taskViewModel.addTask()
                         }
@@ -59,6 +56,14 @@ struct AddTaskView:View {
                 }
             }
             .navigationTitle("Add Task")
+            .task {
+                if let taskToEdit {
+                    taskViewModel.title = taskToEdit.title
+                    taskViewModel.description = taskToEdit.description ?? ""
+                    taskViewModel.dueDate = taskToEdit.dueDate
+                    taskViewModel.linkText = taskToEdit.link?.absoluteString ?? ""
+                }
+            }
         }
     }
 }

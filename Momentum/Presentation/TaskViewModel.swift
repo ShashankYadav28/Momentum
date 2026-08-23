@@ -91,6 +91,7 @@ final class TaskViewModel: ObservableObject {
         let trimmedDescription = description.trimmingCharacters(in: .whitespacesAndNewlines)
         let finalDescription = trimmedDescription.isEmpty ? nil : trimmedDescription
         let task = Task(title: trimmedTitle, description: finalDescription, dueDate: dueDate, link: link)
+        
         return task
         
     }
@@ -106,19 +107,34 @@ final class TaskViewModel: ObservableObject {
     }
     
     func updateTask(_ task:Task) {
+        
+        var updatedTask = task
+        updatedTask.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedDescription = description.trimmingCharacters(in: .whitespacesAndNewlines)
+        updatedTask.description = trimmedDescription.isEmpty ? nil : trimmedDescription
+        updatedTask.dueDate = dueDate
+        
+        if linkText.isEmpty {
+            updatedTask.link = nil
+        } else {
+            updatedTask.link = URL(string: linkText)
+        }
+        
         do {
-            try updateTaskusecase.update(task: task)
+            try updateTaskusecase.update(task: updatedTask)
             fetchTasks()
         } catch  {
             errorMessage = error.localizedDescription
         }
     }
     private func clearForm() {
+        
         title = ""
         description = ""
         dueDate = nil
         linkText = ""
         errorMessage  = nil
+        
     }
     
     func toggleTaskCompletion(_ task:Task) {

@@ -8,25 +8,43 @@
 import SwiftUI
 
 struct HomeScreen:View  {
-    @State var showTask = false
+
     @EnvironmentObject var taskViewModel:TaskViewModel
+    @State var taskSheet:TaskSheet?
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing:20) {
-                HomeHeader()
+                HomeHeader(showrtask: {
+                    taskSheet = .add
+                    })
                 PasteCard()
-                TodayFocus {
-                    showTask = true
-                }
+                TodayFocus(showTask: {
+//                    showTask = true
+                    taskSheet = .add
+                }, editTask: { task in
+                    taskSheet = .editTask(task)
+                })
                 Statistics()
                 Spacer()
     //            Spacer()
 
             }
             .padding()
-            .sheet(isPresented: $showTask) {
-                AddTaskView(taskToEdit: <#Task#>)
-            }
+            .sheet(item: $taskSheet, content: { sheet in
+                switch sheet {
+                case .add:
+                    AddTaskView()
+                case .editTask(let task):
+                    AddTaskView(taskToEdit: task)
+                    
+                }
+            })
+//            .sheet(isPresented: $showTask) {
+//                AddTaskView(taskToEdit: taskToEdit)
+//            }
+//            .sheet(item: $taskToEdit, content: { task in
+//                AddTaskView(taskToEdit: task)
+//            })
             .task {
                 taskViewModel.fetchTasks()
             }
@@ -41,6 +59,8 @@ struct HomeScreen:View  {
 }
 
 struct HomeHeader:View {
+    
+    let showrtask:() -> Void
     var body: some View {
         HStack {
             VStack(alignment: .leading,spacing: 2){
@@ -52,7 +72,7 @@ struct HomeHeader:View {
             Spacer()
             
             Button {
-                
+                showrtask()
             } label: {
                 Image(systemName: "plus")
                     .font(.title2)
@@ -98,14 +118,14 @@ struct PasteCard:View {
         .padding()
         .background(.regularMaterial,in: RoundedRectangle(cornerRadius: 20))
     }
-    
 }
 
 struct TodayFocus:View {
     
     @EnvironmentObject var taskViewModel:TaskViewModel
     let showTask: () -> Void
-    @State private var taskToEdit:Task?
+
+    let editTask: (Task) -> Void
     
     var body:some View {
         VStack(alignment: .leading, spacing: 12){
@@ -125,6 +145,8 @@ struct TodayFocus:View {
                     HStack(spacing: 12){
                         Button {
                             showTask()
+//                            taskSheet = .add
+                            
                         } label: {
                             Label("Add task", systemImage: "plus")
                                 .frame(maxWidth: .infinity)
@@ -173,7 +195,8 @@ struct TodayFocus:View {
                             )
                             .contextMenu {
                                 Button {
-                                    taskToEdit = task
+                                    editTask(task)
+//                                    showTask()
                                 } label: {
                                     Label("Edit", systemImage: "pencil")
                                 }
