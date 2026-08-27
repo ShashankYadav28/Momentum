@@ -27,4 +27,5 @@ struct APIRequest {
 protocol APIClient {
     
     func send(_ request:APIRequest) async throws -> Data
+    
 }
