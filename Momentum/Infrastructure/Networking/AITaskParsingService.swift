@@ -15,6 +15,8 @@ final class ATtaskParsingService: TaskParsingService {
         self.apiClient = apiClient
     }
     
+    let apiRequest = APIRequest(url: , method: .post, headers: , body: )
+    
     func parse(message: String) async throws -> [Task] {
         let gemnirequest = GemniRequest(content: [
             GemniContent(parts: [
