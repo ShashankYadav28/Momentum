@@ -30,7 +30,6 @@ final class UrlSessionAPIClient:APIClient {
         }
         
         return data 
-        
     }
     
     

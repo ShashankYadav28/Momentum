@@ -6,17 +6,17 @@
 //
 
 struct GemniResponse:Decodable {
-    let candidates: [GemniCandidate]
+    let steps: [GemniStep]
 }
 
-struct GemniCandidate: Decodable {
-    let content: GemniResponseContent
+struct GemniStep: Decodable {
+    let type: String
+    let content: [GemniResponseContent]
 }
 
 struct GemniResponseContent: Decodable {
-    let parts: [GemniResponsePart]
+    let type: String
+    let text: String?
 }
 
-struct GemniResponsePart: Decodable {
-    let text: String
-}
+

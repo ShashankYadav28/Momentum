@@ -96,7 +96,6 @@
 				Data/Repositories/SwiftDataTaskRepository.swift,
 				Info.plist,
 				Infrastructure/Networking/AITaskParsingService.swift,
-				PreviewDIContainer.swift,
 			);
 			target = DD5F05613003822F001B3A99 /* Momentum */;
 		};

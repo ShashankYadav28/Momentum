@@ -14,6 +14,7 @@ final class TaskViewModel: ObservableObject {
     private let fetchTaskUseCase:FetchTaskUseCase
     private let deleteTaskuseCase:DeleteTaskUseCase
     private let updateTaskusecase:UpdateTaskUseCase
+    private let taskParsingService:TaskParsingService
     
     @Published var title = ""
     @Published var description = ""
@@ -25,14 +26,16 @@ final class TaskViewModel: ObservableObject {
 
 //    @Published var taskBeingEdited: Task?
     
-    init(createTaskUseCase: CreateTaskUseCase,fetchTaskUseCase:FetchTaskUseCase,deleteTaskUsecase : DeleteTaskUseCase ,updateTaskUsecase: UpdateTaskUseCase) {
+    init(createTaskUseCase: CreateTaskUseCase,fetchTaskUseCase:FetchTaskUseCase,deleteTaskUsecase : DeleteTaskUseCase ,updateTaskUsecase: UpdateTaskUseCase,taskParsingService:TaskParsingService) {
         
         self.createTaskUseCase = createTaskUseCase
         self.fetchTaskUseCase = fetchTaskUseCase
         self.deleteTaskuseCase = deleteTaskUsecase
         self.updateTaskusecase = updateTaskUsecase
+        self.taskParsingService = taskParsingService
         
     }
+    
     
     func addTask() {
         
@@ -149,5 +152,17 @@ final class TaskViewModel: ObservableObject {
         }
 //        updateTaskusecase.update(task: updatedTask)
         
+    }
+    
+    func executeParse(message:String) async {
+        do {
+            let tasks = try await taskParsingService.parse(message: message)
+            print("extracted Task count:\(tasks.count)")
+        }
+        catch {
+            print(error.localizedDescription)
+            errorMessage = error.localizedDescription
+        }
+       
     }
 }

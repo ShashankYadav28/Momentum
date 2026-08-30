@@ -8,15 +8,17 @@
 import Foundation
 
 struct GemniRequest:Encodable {
-    let content:[GemniContent]
+//    let content:[GemniContent]
+    let model: String
+    let input: String
     
 }
 
-struct GemniContent: Codable {
-    let parts:[GemniPart]
-}
-
-
-struct GemniPart:Codable {
-    let text:String
-}
+//struct GemniContent: Codable {
+//    let parts:[GemniPart]
+//}
+//
+//
+//struct GemniPart:Codable {
+//    let text:String
+//}

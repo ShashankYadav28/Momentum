@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ATtaskParsingService: TaskParsingService {
+final class AITaskParsingService: TaskParsingService {
    
     private let apiClient:APIClient
     
@@ -15,18 +15,42 @@ final class ATtaskParsingService: TaskParsingService {
         self.apiClient = apiClient
     }
     
-    let apiRequest = APIRequest(url: , method: .post, headers: , body: )
+
     
     func parse(message: String) async throws -> [Task] {
-        let gemnirequest = GemniRequest(content: [
-            GemniContent(parts: [
-                GemniPart(text: message)
-            ])
-        ])
         
-        let body = try JSONEncoder().encode(gemnirequest)
+        
+        print("🔥 AITaskParsingService.parse() CALLED")
+        guard let url  = URL(string: "https://generativelanguage.googleapis.com/v1beta/interactions") else {
+            throw APIError.invalidURL
+        }
+        
+//        let gemnirequest = GemniRequest(content: [
+//            GemniContent(parts: [
+//                GemniPart(text: message)
+//            ])
+//        ])
+//
+        
 
+        let gemniRequest = GemniRequest(model: "gemini-3.7-flash", input: message);
+        let body = try JSONEncoder().encode(gemniRequest) ;
+        
+        let apiRequest = APIRequest(url: url, method: .post,  headers:  [ "Content-Type": "application/json",
+                                    "x-goog-api-key": Config.geminiAPIKey
+                                                                        ], body: body);
+        
+        
+        let data = try await apiClient.send(apiRequest)
+        print(String(data: data, encoding: .utf8))
+        let decodedData = try JSONDecoder().decode(GemniResponse.self, from: data)
+        
+//        let parsedTask =
+
+        return []
     }
+    
+    
 }
 
 

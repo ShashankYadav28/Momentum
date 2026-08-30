@@ -18,7 +18,12 @@ struct HomeScreen:View  {
                     taskViewModel.clearForm()
                     taskSheet = .add
                     })
-                PasteCard()
+                PasteCard(extract: { message in
+                    _Concurrency.Task {
+                        await taskViewModel.executeParse(message: message)
+                    }
+                   
+                })
                 TodayFocus(showTask: {
 //                    showTask = true
                     taskSheet = .add
@@ -89,6 +94,7 @@ struct HomeHeader:View {
 struct PasteCard:View {
     
     @State private var message = ""
+    let extract:(String) -> Void
     
     var body :some View {
         VStack(alignment: .leading) {
@@ -108,7 +114,7 @@ struct PasteCard:View {
                 }
             
             Button {
-                
+                extract(message)
             } label: {
                 Label("Extract Tasks", systemImage: "sparkles")
                     .frame(maxWidth: .infinity)
