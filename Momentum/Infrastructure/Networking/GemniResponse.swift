@@ -11,7 +11,7 @@ struct GemniResponse:Decodable {
 
 struct GemniStep: Decodable {
     let type: String
-    let content: [GemniResponseContent]
+    let content: [GemniResponseContent]?
 }
 
 struct GemniResponseContent: Decodable {

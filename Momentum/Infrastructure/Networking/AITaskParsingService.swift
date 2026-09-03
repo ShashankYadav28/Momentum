@@ -15,8 +15,6 @@ final class AITaskParsingService: TaskParsingService {
         self.apiClient = apiClient
     }
     
-
-    
     func parse(message: String) async throws -> [Task] {
         
         
@@ -31,8 +29,29 @@ final class AITaskParsingService: TaskParsingService {
 //            ])
 //        ])
 //
-        
+                
+// local Json testing
+//        let mockJSON = """
+//        {
+//            "steps": [
+//                {
+//                    "type": "message",
+//                    "content": [
+//                        {
+//                            "type": "text",
+//                            "text": "Test task response"
+//                        }
+//                    ]
+//                }
+//            ]
+//        }
+//        """
+//        let mockData = Data(mockJSON.utf8)
+//        let decodedData = try JSONDecoder().decode(GemniResponse.self, from: mockData)
+//        let text = decodedData.steps[0].content[0].text
+//        print(decodedData)
 
+        
         let gemniRequest = GemniRequest(model: "gemini-3.7-flash", input: message);
         let body = try JSONEncoder().encode(gemniRequest) ;
         
@@ -44,12 +63,12 @@ final class AITaskParsingService: TaskParsingService {
         let data = try await apiClient.send(apiRequest)
         print(String(data: data, encoding: .utf8))
         let decodedData = try JSONDecoder().decode(GemniResponse.self, from: data)
+        print(decodedData)
         
 //        let parsedTask =
 
         return []
     }
-    
     
 }
 
