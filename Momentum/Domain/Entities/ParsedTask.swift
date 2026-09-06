@@ -8,9 +8,9 @@
 import Foundation
 
 struct ParsedTask:Codable {
-    
+
     let title: String
     let description: String?
     let dueDate: Date?
-    let iink: URL?
+    let link: URL?
 }

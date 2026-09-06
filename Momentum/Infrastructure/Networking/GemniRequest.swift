@@ -12,13 +12,25 @@ struct GemniRequest:Encodable {
     let model: String
     let input: String
     let responseFormat:ResponseFormat
-    
+
+    enum CodingKeys: String, CodingKey {
+        case model
+        case input
+        case responseFormat = "response_format"
+    }
+
 }
 
 struct ResponseFormat:Encodable  {
     let type:String
     let mimeType:String
     let schema:JSONSchema
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case mimeType = "mime_type"
+        case schema
+    }
 }
 
 struct JSONSchema: Encodable {
@@ -28,11 +40,11 @@ struct JSONSchema: Encodable {
 }
 
 struct JSONProperty: Encodable {
-    
-    let type: String
+
+    let type: [String]
     let description: String
     let format: String?
-    
+
 }
 
 //struct GemniContent: Codable {
