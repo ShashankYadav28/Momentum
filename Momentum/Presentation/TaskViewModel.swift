@@ -23,7 +23,11 @@ final class TaskViewModel: ObservableObject {
     @Published var errorMessage:String?
     @Published var tasks:[Task] = []
     @Published var taskToedit:Task?
-
+    @Published var taskBeingreviewed:Task?
+    @Published var message = ""
+    /// Presentation-only flag so the UI can show the AI Extracting screen
+    /// for exactly as long as the real TaskParsingService call takes.
+    @Published var isExtracting = false
 //    @Published var taskBeingEdited: Task?
     
     init(createTaskUseCase: CreateTaskUseCase,fetchTaskUseCase:FetchTaskUseCase,deleteTaskUsecase : DeleteTaskUseCase ,updateTaskUsecase: UpdateTaskUseCase,taskParsingService:TaskParsingService) {
@@ -155,14 +159,46 @@ final class TaskViewModel: ObservableObject {
     }
     
     func executeParse(message:String) async {
+        errorMessage = nil
+        isExtracting = true
+        defer { isExtracting = false }
         do {
             let tasks = try await taskParsingService.parse(message: message)
             print("extracted Task count:\(tasks.count)")
+
+            guard let extractedTask = tasks.first else {
+                errorMessage = "Couldn't understand that message. Try rephrasing it."
+                return
+            }
+
+            // The extracted task is only held for review here — it is not
+            // persisted until the user confirms it on the Review Task screen.
+            taskBeingreviewed = extractedTask
         }
         catch {
             print(error.localizedDescription)
             errorMessage = error.localizedDescription
         }
        
+    }
+
+    /// Persists a task the user has reviewed and confirmed on ReviewTaskView,
+    /// going through the same create-task flow as manual task entry.
+    func confirmReviewedTask(_ task: Task) {
+        do {
+            try createTaskUseCase.execute(task: task)
+            print("Reviewed task saved", task.title)
+            fetchTasks()
+            taskBeingreviewed = nil
+            message = ""
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    /// Abandons the pending reviewed task without persisting anything.
+    func discardReviewedTask() {
+        taskBeingreviewed = nil
+        message = ""
     }
 }

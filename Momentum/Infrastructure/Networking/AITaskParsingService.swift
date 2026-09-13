@@ -116,15 +116,16 @@ final class AITaskParsingService: TaskParsingService {
         guard let jsonData = jsonString.data(using: .utf8) else {
             throw APIError.invalidResponse
         }
-        let parsedTask = try JSONDecoder().decode(ParsedTask.self, from: jsonData)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let parsedTask = try decoder.decode(ParsedTask.self, from: jsonData)
         let task  = TaskMapper.toDomain(parsedTask: parsedTask)
         print(decodedData)
 
 //        let parsedTask =
-
-        return [task]
+        return [task] ;
+        
     }
-
 }
 
 
